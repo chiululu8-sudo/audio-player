@@ -8,6 +8,7 @@
         body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background-color: #f5f5f5; }
         .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         h2 { font-size: 1.2rem; color: #333; margin-top: 0; }
+        select { width: 100%; padding: 10px; margin-top: 15px; font-size: 1rem; border-radius: 5px; border: 1px solid #ccc; }
         audio { width: 100%; margin-top: 15px; outline: none; }
         .status { margin-top: 15px; font-size: 0.95rem; color: #0056b3; line-height: 1.5; font-weight: bold; }
         .instructions { margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.5; border-top: 1px solid #eee; padding-top: 10px; }
@@ -15,23 +16,51 @@
 </head>
 <body>
     <div class="container">
-        <h2>台股商戰有聲書 (自動記憶進度)</h2>
-        <div class="status" id="statusText">正在載入雲端有聲書...</div>
-        <!-- 這裡直接指定您的 MP3 檔名 -->
-        <audio id="audioPlayer" controls src="audiobook.mp3"></audio>
+        <h2>台股商戰有聲書</h2>
+
+        <!-- 檔案選擇下拉選單 -->
+        <select id="trackSelect">
+            <!-- 只要上傳了新檔案，就在這裡加一行 -->
+            <option value="audiobook.mp3">第一部分 (吸籌與試盤)</option>
+            <option value="audiobook_02.mp3">第二部分 (點火與派發)</option>
+        </select>
+
+        <div class="status" id="statusText">請選擇檔案...</div>
+        <audio id="audioPlayer" controls></audio>
         
         <div class="instructions">
             📌 說明：<br>
-            1. 檔案已直接存放於雲端，手機打開即可播放。<br>
-            2. 播放進度會自動記錄在您的手機瀏覽器中。<br>
-            3. 下次打開會自動跳轉回上次暫停的時間點。
+            1. 從下拉選單切換想聽的章節。<br>
+            2. 每個章節都會「獨立記憶」各自的播放進度。<br>
+            3. 網頁更新後，請於手機瀏覽器強制重新整理。
         </div>
     </div>
 
     <script>
+        const trackSelect = document.getElementById('trackSelect');
         const player = document.getElementById('audioPlayer');
         const statusText = document.getElementById('statusText');
-        const storageKey = 'audioProgress_audiobook.mp3';
+        
+        let currentFile = trackSelect.value;
+        let storageKey = 'audioProgress_' + currentFile;
+
+        // 初始化：載入預設的第一個檔案
+        loadTrack(currentFile);
+
+        // 當下拉選單改變時，切換檔案
+        trackSelect.addEventListener('change', function() {
+            currentFile = this.value;
+            storageKey = 'audioProgress_' + currentFile;
+            loadTrack(currentFile);
+            
+            // 切換檔案後自動嘗試播放
+            player.play().catch(e => console.log("等待手動播放"));
+        });
+
+        function loadTrack(filename) {
+            player.src = filename;
+            statusText.textContent = `載入中...`;
+        }
 
         player.onloadedmetadata = function() {
             const savedTime = localStorage.getItem(storageKey);
@@ -51,7 +80,7 @@
 
         player.addEventListener('ended', function() {
             localStorage.removeItem(storageKey);
-            statusText.textContent = `✅ 播放完畢！`;
+            statusText.textContent = `✅ 本章節播放完畢！`;
         });
 
         function formatTime(seconds) {
