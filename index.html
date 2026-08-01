@@ -5,32 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>台股商戰有聲書</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f5f5f5; }
-    .container { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px #0002; }
-    h2 { font-size: 1.2rem; color: #333; margin-top: 0; }
-    select, audio { width: 100%; margin-top: 15px; font-size: 1rem; }
-    select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    .status { margin-top: 15px; color: #0056b3; line-height: 1.5; font-weight: bold; }
-    .instructions { margin-top: 20px; font-size: .85rem; color: #666; line-height: 1.5; border-top: 1px solid #eee; padding-top: 10px; }
+    body { font-family: system-ui, sans-serif; padding: 16px; max-width: 640px; margin: auto; background: #f4f6f8; }
+    .container { background: #fff; padding: 22px; border-radius: 14px; box-shadow: 0 2px 10px #0002; }
+    h2 { font-size: 1.45rem; color: #17365d; margin: 0; }
+    select, audio { width: 100%; margin-top: 18px; }
+    select { min-height: 56px; padding: 10px 14px; font-size: 1.15rem; border-radius: 9px; border: 1px solid #aeb8c5; background: #fff; }
+    audio { min-height: 54px; }
+    .play-button { width: 100%; min-height: 76px; margin-top: 18px; border: 0; border-radius: 12px; background: #16803c; color: #fff; font-size: 1.3rem; font-weight: 800; touch-action: manipulation; }
+    .play-button:active { background: #0d5a29; transform: translateY(1px); }
+    .seek-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+    .seek-button { min-height: 64px; border: 0; border-radius: 10px; background: #0b5cab; color: #fff; font-size: 1.08rem; font-weight: 700; touch-action: manipulation; }
+    .seek-button:active { background: #073e74; transform: translateY(1px); }
+    .status { margin-top: 18px; font-size: 1rem; color: #0056b3; line-height: 1.5; font-weight: 700; }
+    .instructions { margin-top: 22px; font-size: .92rem; color: #555; line-height: 1.65; border-top: 1px solid #e5e9ee; padding-top: 14px; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>台股商戰有聲書</h2>
-    <select id="trackSelect">
-      <option value="1-36章.mp3">第一部分（第 1–36 章）</option>
-      <option value="37-72章.mp3">第二部分（第 37–72 章）</option>
-      <option value="73-108章.mp3">第三部分（第 73–108 章）</option>
-      <option value="109-144章.mp3">第四部分（第 109–144 章）</option>
-      <option value="145-180章.mp3">第五部分（第 145–180 章）</option>
-      <option value="181-216章.mp3">第六部分（第 181–216 章）</option>
-      <option value="217-252章.mp3">第七部分（第 217–252 章）</option>
-      <option value="253-288章.mp3">第八部分（第 253–288 章）</option>
-      <option value="289-324章.mp3">第九部分（第 289–324 章）</option>
-      <option value="325-360章.mp3">第十部分（第 325–360 章）</option>
+
+    <select id="trackSelect" aria-label="選擇章節">
+      <optgroup label="原版：台股商戰版（每 36 章）">
+        <option value="1-36章.mp3">原版 第一部分：第 1–36 章</option>
+        <option value="37-72章.mp3">原版 第二部分：第 37–72 章</option>
+        <option value="73-108章.mp3">原版 第三部分：第 73–108 章</option>
+        <option value="109-144章.mp3">原版 第四部分：第 109–144 章</option>
+        <option value="145-180章.mp3">原版 第五部分：第 145–180 章</option>
+        <option value="181-216章.mp3">原版 第六部分：第 181–216 章</option>
+        <option value="217-252章.mp3">原版 第七部分：第 217–252 章</option>
+        <option value="253-288章.mp3">原版 第八部分：第 253–288 章</option>
+        <option value="289-324章.mp3">原版 第九部分：第 289–324 章</option>
+        <option value="325-360章.mp3">原版 第十部分：第 325–360 章</option>
+      </optgroup>
+      <optgroup label="2003 重生交易版（每 60 章）">
+        <option value="重生1-60章.mp3">重生版 第一部分：第 1–60 章</option>
+        <option value="重生61-120章.mp3">重生版 第二部分：第 61–120 章</option>
+        <option value="重生121-180章.mp3">重生版 第三部分：第 121–180 章</option>
+        <option value="重生181-240章.mp3">重生版 第四部分：第 181–240 章</option>
+        <option value="重生241-300章.mp3">重生版 第五部分：第 241–300 章</option>
+        <option value="重生301-360章.mp3">重生版 第六部分：第 301–360 章</option>
+      </optgroup>
     </select>
-    <div class="status" id="statusText">載入中…</div>
+
+    <button class="play-button" id="playPause" type="button">▶ 開始播放</button>
     <audio id="audioPlayer" controls preload="metadata" playsinline></audio>
+
+    <div class="seek-controls">
+      <button class="seek-button" id="back10" type="button">↶ 倒退 10 秒</button>
+      <button class="seek-button" id="forward10" type="button">前進 10 秒 ↷</button>
+    </div>
+
+    <div class="status" id="statusText">載入中…</div>
     <div class="instructions">
       每一部分會分別記住播放進度。暫停、切到背景或離開頁面時都會立即保存；回到頁面後，按播放即可續聽。
     </div>
@@ -40,6 +65,7 @@
     const select = document.getElementById('trackSelect');
     const player = document.getElementById('audioPlayer');
     const status = document.getElementById('statusText');
+    const playPause = document.getElementById('playPause');
     const availableTracks = Array.from(select.options, option => option.value);
     let currentFile = localStorage.getItem('audioLastTrack') || select.value;
 
@@ -62,9 +88,26 @@
       player.src = encodeURI(file);
       player.load();
       status.textContent = '載入中…';
+      playPause.textContent = '▶ 開始播放';
+    }
+
+    function seekBy(seconds) {
+      if (!Number.isFinite(player.duration)) return;
+      player.currentTime = Math.max(0, Math.min(player.duration, player.currentTime + seconds));
+      saveProgress();
+      status.textContent = `目前位置：${formatTime(player.currentTime)}`;
     }
 
     select.addEventListener('change', () => loadTrack(select.value));
+    playPause.addEventListener('click', () => {
+      if (player.paused) {
+        player.play().catch(() => { status.textContent = '請再按一次播放'; });
+      } else {
+        player.pause();
+      }
+    });
+    document.getElementById('back10').addEventListener('click', () => seekBy(-10));
+    document.getElementById('forward10').addEventListener('click', () => seekBy(10));
 
     player.addEventListener('loadedmetadata', () => {
       const saved = Number(localStorage.getItem(progressKey()) || 0);
@@ -80,14 +123,15 @@
       if (Math.floor(player.currentTime) % 5 === 0) saveProgress();
     });
     player.addEventListener('pause', saveProgress);
+    player.addEventListener('play', () => { playPause.textContent = '❚❚ 暫停播放'; });
+    player.addEventListener('pause', () => { playPause.textContent = '▶ 繼續播放'; });
     player.addEventListener('ended', () => {
       localStorage.removeItem(progressKey());
       status.textContent = '本部分播放完畢';
+      playPause.textContent = '▶ 重新播放';
     });
     window.addEventListener('pagehide', saveProgress);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) saveProgress();
-    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) saveProgress(); });
 
     function formatTime(seconds) {
       const minutes = Math.floor(seconds / 60);
