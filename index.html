@@ -1,130 +1,117 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14395f">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>台股商戰有聲書 V3.5</title>
+  <title>前方五公里｜有聲書</title>
   <style>
-    :root{--blue:#0b5cab;--green:#16803c;--ink:#17365d;--bg:#f4f6f8}*{box-sizing:border-box}body{font-family:system-ui,"Microsoft JhengHei",sans-serif;padding:16px;max-width:640px;margin:auto;background:var(--bg);color:#172033}.container{background:#fff;padding:22px;border-radius:14px;box-shadow:0 2px 10px #0002}h2{font-size:1.45rem;color:var(--ink);margin:0}select,audio{width:100%;margin-top:18px}select{min-height:56px;padding:10px 14px;font-size:1.1rem;border-radius:9px;border:1px solid #aeb8c5;background:#fff}audio{min-height:54px}.auto-next{display:flex;align-items:center;gap:12px;margin-top:18px;padding:14px;border:1px solid #cbd9e8;border-radius:10px;background:#f5f9ff;font-size:1.05rem;font-weight:700;color:var(--ink)}.auto-next input{width:26px;height:26px;accent-color:var(--blue)}.play-button{width:100%;min-height:76px;margin-top:18px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:1.3rem;font-weight:800;touch-action:manipulation}.play-button:active{background:#0d5a29;transform:translateY(1px)}.seek-controls{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.seek-button{min-height:64px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-size:1.08rem;font-weight:700;touch-action:manipulation}.seek-button:active{background:#073e74;transform:translateY(1px)}.status{margin-top:18px;font-size:1rem;color:#0056b3;line-height:1.5;font-weight:700}.transcript{margin-top:22px;border-top:1px solid #e5e9ee;padding-top:14px}.transcript summary{cursor:pointer;color:var(--ink);font-size:1.08rem;font-weight:800;padding:10px 0}.transcript-note{color:#64748b;font-size:.9rem;line-height:1.65;margin:6px 0 12px}.sync-adjust{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.sync-button{min-height:54px;border:0;border-radius:9px;background:#7a4b00;color:#fff;font-size:.98rem;font-weight:800}.sync-reset{grid-column:1/-1;background:#e8eef5;color:var(--ink)}.sync-status{text-align:center;color:#7a4b00;font-weight:700;font-size:.9rem;margin:2px 0 12px}.transcript-text{height:min(calc(100dvh - 170px),850px);min-height:560px;overflow-y:auto;overflow-x:hidden;font-size:1.05rem;line-height:2;padding:16px;border:1px solid #d8e1eb;border-radius:10px;background:#fbfdff;scroll-behavior:smooth;overscroll-behavior:contain}.transcript-paragraph{margin:0 0 1em}.transcript-segment{padding:2px 1px;border-radius:4px;transition:background-color .18s,color .18s}.transcript-segment.active{background:#ffe679;color:#642d00;box-shadow:0 0 0 2px #ffe679;font-weight:700}.instructions{margin-top:22px;font-size:.92rem;color:#555;line-height:1.65;border-top:1px solid #e5e9ee;padding-top:14px}@media(max-width:700px){.transcript-text{height:calc(100dvh - 150px);min-height:440px}}
+    :root{--navy:#14395f;--blue:#1769aa;--green:#16834b;--ink:#172538;--muted:#607086;--line:#cbd7e4;--bg:#eef3f8;--active:#ffe47a}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#e6f0f8 0,#f3f6f9 380px);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif}
+    button,select{font:inherit;touch-action:manipulation}
+    .shell{width:min(760px,100%);margin:auto;padding:14px}
+    .panel{background:#fff;border:1px solid #dce5ed;border-radius:18px;box-shadow:0 7px 24px #24486616;padding:clamp(16px,4vw,26px);margin-bottom:16px}
+    .title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    h1{margin:0;color:var(--navy);font-size:clamp(28px,6vw,42px);line-height:1.2}
+    .version{color:var(--muted);font-weight:700;white-space:nowrap}
+    .subtitle{margin:9px 0 0;color:var(--muted);font-size:18px}
+    .track-name{margin:20px 0 10px;padding:15px;border:1px solid var(--line);border-radius:12px;background:#f8fbfe;color:var(--navy);font-size:19px;font-weight:800}
+    audio{width:100%;min-height:58px}
+    .big-play{width:100%;min-height:78px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:25px;font-weight:900;cursor:pointer}
+    .seek-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .seek,.sync-button{min-height:62px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-size:19px;font-weight:800;cursor:pointer}
+    .status{min-height:1.5em;margin:14px 2px 0;color:#075cb0;font-size:17px;font-weight:700;line-height:1.55}
+    .settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .setting{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;font-weight:700}
+    select{min-height:44px;border:1px solid #9fb3c7;border-radius:9px;background:#fff;padding:6px 10px}
+    input[type=checkbox]{width:27px;height:27px;accent-color:var(--blue)}
+    .transcript-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+    h2{margin:0;color:var(--navy);font-size:25px}
+    .transcript-note{margin:8px 0 13px;color:var(--muted);line-height:1.6}
+    .sync-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .sync-button{min-height:56px;background:#8b5b17;font-size:17px}
+    .reset{grid-column:1/-1;background:#e7eef6;color:var(--navy)}
+    .sync-status{text-align:center;color:#805207;font-weight:800;margin:8px 0 13px}
+    .transcript{height:min(calc(100dvh - 180px),820px);min-height:520px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scroll-behavior:smooth;border:1px solid var(--line);border-radius:13px;background:#fbfdff;padding:clamp(14px,4vw,24px);font-size:21px;line-height:1.95}
+    .segment{display:block;margin:0 0 .8em;padding:.18em .32em;border-radius:7px;cursor:pointer;white-space:pre-wrap}
+    .segment:hover{background:#eef5fb}
+    .segment.active{background:var(--active);box-shadow:inset 5px 0 #c68b00;color:#251d00;font-weight:800}
+    .empty{text-align:center;color:var(--muted);padding:50px 10px;line-height:1.7}
+    .tip{margin-top:12px;color:var(--muted);font-size:15px;line-height:1.65}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:4px solid #f2bd32;outline-offset:2px}
+    @media(max-width:620px){.shell{padding:9px}.settings{grid-template-columns:1fr}.transcript{height:calc(100dvh - 145px);min-height:440px;font-size:20px}.seek,.sync-button{font-size:17px}.title-row{align-items:flex-start}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>台股商戰有聲書 <span style="font-size:.72em;color:#64748b">V3.5</span></h2>
-    <select id="trackSelect" aria-label="選擇章節部分">
-      <optgroup label="2003 重生交易版（每部 40 章）">
-        <option value="重生1-40章.mp3">重生版 第一部分：第 1–40 章</option>
-        <option value="重生41-80章.mp3">重生版 第二部分：第 41–80 章</option>
-        <option value="重生81-120章.mp3">重生版 第三部分：第 81–120 章</option>
-        <option value="重生121-160章.mp3">重生版 第四部分：第 121–160 章</option>
-        <option value="重生161-200章.mp3">重生版 第五部分：第 161–200 章</option>
-        <option value="重生201-240章.mp3">重生版 第六部分：第 201–240 章</option>
-        <option value="重生241-280章.mp3">重生版 第七部分：第 241–280 章</option>
-        <option value="重生281-320章.mp3">重生版 第八部分：第 281–320 章</option>
-        <option value="重生321-360章.mp3">重生版 第九部分：第 321–360 章</option>
-      </optgroup>
-      <optgroup label="原版（每部 36 章）">
-        <option value="1-36章.mp3">原版 第一部分：第 1–36 章</option>
-        <option value="37-72章.mp3">原版 第二部分：第 37–72 章</option>
-        <option value="73-108章.mp3">原版 第三部分：第 73–108 章</option>
-        <option value="109-144章.mp3">原版 第四部分：第 109–144 章</option>
-        <option value="145-180章.mp3">原版 第五部分：第 145–180 章</option>
-        <option value="181-216章.mp3">原版 第六部分：第 181–216 章</option>
-        <option value="217-252章.mp3">原版 第七部分：第 217–252 章</option>
-        <option value="253-288章.mp3">原版 第八部分：第 253–288 章</option>
-        <option value="289-324章.mp3">原版 第九部分：第 289–324 章</option>
-        <option value="325-360章.mp3">原版 第十部分：第 325–360 章</option>
-      </optgroup>
-    </select>
+  <main class="shell">
+    <section class="panel">
+      <div class="title-row">
+        <div><h1>前方五公里</h1><p class="subtitle">第一季｜第1～10集</p></div>
+        <span class="version">V1.0</span>
+      </div>
+      <div class="track-name">《前方五公里》第一季・第1～10集</div>
+      <button class="big-play" id="bigPlay" type="button">▶ 點擊播放</button>
+      <audio id="player" controls preload="metadata" playsinline src="front-five-km-s1-e01-10.mp3"></audio>
+      <div class="seek-grid">
+        <button class="seek" id="back10" type="button">↶ 倒退10秒</button>
+        <button class="seek" id="forward10" type="button">前進10秒 ↷</button>
+      </div>
+      <div class="settings">
+        <div class="setting"><label for="speed">播放速度</label><select id="speed"><option value="0.75">0.75倍</option><option value="1" selected>正常</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="2">2倍</option></select></div>
+        <div class="setting"><label for="autoFollow">文字自動跟隨</label><input id="autoFollow" type="checkbox" checked></div>
+      </div>
+      <div class="status" id="status">準備就緒，點擊播放即可。</div>
+    </section>
 
-    <label class="auto-next"><input id="autoNext" type="checkbox"><span>播完自動播放下一部</span></label>
-    <button class="play-button" id="playPause" type="button">▶ 點擊播放</button>
-    <audio id="audioPlayer" controls preload="auto" playsinline></audio>
-    <div class="seek-controls"><button class="seek-button" id="back10" type="button">↶ 倒退 10 秒</button><button class="seek-button" id="forward10" type="button">前進 10 秒 ↷</button></div>
-    <div class="status" id="statusText">準備就緒，點擊播放即可</div>
-    <details class="transcript" id="transcriptDetails" open><summary>📖 文字同步對照（目前句子會反白）</summary><p class="transcript-note" id="transcriptNote">文字會隨音檔切換，播放時自動捲到目前句子。</p><div class="sync-adjust"><button class="sync-button" id="captionSlower" type="button">↑ 黃色往上<br>退後 10 秒</button><button class="sync-button" id="captionFaster" type="button">↓ 黃色往下<br>前進 10 秒</button><button class="sync-button sync-reset" id="captionReset" type="button">重設文字同步</button></div><div class="sync-status" id="syncStatus">文字同步：原始估算位置</div><div class="transcript-text" id="transcriptText">正在準備文字對照…</div></details>
-    <div class="instructions">勾選「播完自動播放下一部」後，每一部結束會直接接下一部。取消勾選後，則會重複播放目前這一部。藍牙耳機的播放／暫停鍵也可繼續使用；每一部會分別記住播放進度。</div>
-  </div>
+    <section class="panel">
+      <div class="transcript-head"><h2>聲音文字同步</h2></div>
+      <p class="transcript-note">目前念到的句子會標成黃色，並自動移到文字框中央。點選任一句可跳到約略位置。</p>
+      <div class="sync-grid">
+        <button class="sync-button" id="textLater" type="button">文字太快<br>延後10秒</button>
+        <button class="sync-button" id="textEarlier" type="button">文字太慢<br>提前10秒</button>
+        <button class="sync-button reset" id="syncReset" type="button">重設文字同步</button>
+      </div>
+      <div class="sync-status" id="syncStatus">文字同步：原始估算位置</div>
+      <div class="transcript" id="transcript"><div class="empty">正在準備小說文字……</div></div>
+      <div class="tip">文字位置依整段錄音時間估算；如果語速改變，可用「文字太快／太慢」調整。播放進度及校正值會保存在這台裝置。</div>
+    </section>
+  </main>
 
-  <script src="transcripts.js?v=3.5"></script>
+  <script src="transcripts.js?v=1.0"></script>
   <script>
-    const select=document.getElementById('trackSelect'),player=document.getElementById('audioPlayer'),status=document.getElementById('statusText'),playPause=document.getElementById('playPause'),autoNext=document.getElementById('autoNext'),transcriptText=document.getElementById('transcriptText'),transcriptNote=document.getElementById('transcriptNote'),transcriptDetails=document.getElementById('transcriptDetails'),syncStatus=document.getElementById('syncStatus');
-    const tracks=Array.from(select.options,option=>option.value);
-    let currentFile=localStorage.getItem('audioLastTrack')||select.value,lastSavedSecond=-1,transcriptSegments=[],transcriptWeights=[],transcriptTotalWeight=0,activeTranscriptIndex=-1,followFrame=0,syncOffsetSeconds=0;
-    if(!tracks.includes(currentFile))currentFile=select.value;
-    select.value=currentFile;
-    autoNext.checked=localStorage.getItem('audioAutoNext')==='true';
-    const progressKey=()=>`audioProgress_${currentFile}`;
-    const syncKey=()=>`audioTextSync_${currentFile}`;
-    const currentName=()=>select.options[select.selectedIndex].text;
-
-    function formatTime(seconds){const m=Math.floor(seconds/60),s=Math.floor(seconds%60);return `${m} 分 ${s} 秒`}
-    function saveProgress(){if(Number.isFinite(player.currentTime)&&player.currentTime>0)localStorage.setItem(progressKey(),String(player.currentTime))}
-    function updateSyncStatus(){syncStatus.textContent=syncOffsetSeconds===0?'文字同步：原始估算位置':syncOffsetSeconds<0?`文字同步：黃色已退後 ${Math.abs(syncOffsetSeconds)} 秒`:`文字同步：黃色已前進 ${syncOffsetSeconds} 秒`}
-    function loadSyncOffset(){syncOffsetSeconds=Number(localStorage.getItem(syncKey())||0);updateSyncStatus()}
-    function adjustSync(seconds){syncOffsetSeconds=Math.max(-600,Math.min(600,syncOffsetSeconds+seconds));localStorage.setItem(syncKey(),String(syncOffsetSeconds));updateSyncStatus();updateTranscriptPosition(true)}
-    function updateLoop(){player.loop=!autoNext.checked}
-    function sentenceParts(paragraph){return paragraph.match(/[^。！？!?；;]+[。！？!?；;]?/g)||[paragraph]}
-    function segmentWeight(text){const useful=(text.match(/[\p{L}\p{N}]/gu)||[]).length;const pauses=(text.match(/[，、：；。！？,.!?;:]/g)||[]).length;return Math.max(3,useful+pauses*2)}
-    function updateTranscript(){
-      const text=(window.AUDIO_TRANSCRIPTS||{})[currentFile];
-      transcriptText.replaceChildren();transcriptSegments=[];transcriptWeights=[];transcriptTotalWeight=0;activeTranscriptIndex=-1;
-      if(!text){transcriptText.textContent='這一部分尚未提供文字對照。';transcriptNote.textContent='目前沒有這個音檔的文字。';return}
-      for(const paragraphText of text.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean)){
-        const paragraph=document.createElement('p');paragraph.className='transcript-paragraph';
-        for(const part of sentenceParts(paragraphText)){
-          const span=document.createElement('span');span.className='transcript-segment';span.textContent=part;paragraph.appendChild(span);
-          transcriptSegments.push(span);const weight=segmentWeight(part);transcriptWeights.push(weight);transcriptTotalWeight+=weight;
-        }
-        transcriptText.appendChild(paragraph);
-      }
-      if(currentFile.startsWith('重生'))transcriptNote.textContent='重生版第 1～360 章已全部更新為最新重寫文字。黃色句子依實際播放時間估算同步。';
-      else transcriptNote.textContent='原版文字已補上。黃色句子會依播放時間估算位置並自動捲動。';
-    }
-    function transcriptIndexForTime(){
-      if(!transcriptSegments.length||!Number.isFinite(player.duration)||player.duration<=0)return -1;
-      const adjusted=Math.max(0,Math.min(player.duration,player.currentTime+syncOffsetSeconds));const target=(adjusted/player.duration)*transcriptTotalWeight;let total=0;
-      for(let i=0;i<transcriptWeights.length;i++){total+=transcriptWeights[i];if(total>=target)return i}
-      return transcriptSegments.length-1;
-    }
-    function updateTranscriptPosition(force=false){
-      const next=transcriptIndexForTime();if(next<0||(!force&&next===activeTranscriptIndex))return;
-      if(activeTranscriptIndex>=0)transcriptSegments[activeTranscriptIndex]?.classList.remove('active');
-      activeTranscriptIndex=next;const current=transcriptSegments[next];current.classList.add('active');
-      if(transcriptDetails.open){
-        const box=transcriptText.getBoundingClientRect(),line=current.getBoundingClientRect();
-        const target=Math.max(0,transcriptText.scrollTop+(line.top-box.top)-24);
-        transcriptText.scrollTo({top:target,behavior:force?'auto':'smooth'});
-      }
-    }
-    function followTranscript(){updateTranscriptPosition();if(!player.paused&&!player.ended)followFrame=requestAnimationFrame(followTranscript)}
-    function updateMediaSession(){if(!('mediaSession'in navigator))return;navigator.mediaSession.metadata=new MediaMetadata({title:currentName(),artist:'台股商戰有聲書',album:'有聲書播放器'})}
-    function safePlay(){player.play().catch(()=>{status.textContent='請先在網頁上按一次播放；之後可用藍牙耳機控制。'})}
-    function loadTrack(file,playAfterLoad=false){saveProgress();cancelAnimationFrame(followFrame);currentFile=file;localStorage.setItem('audioLastTrack',file);select.value=file;player.pause();player.src=encodeURI(file);loadSyncOffset();updateLoop();updateMediaSession();updateTranscript();player.load();status.textContent=`載入中：${currentName()}`;playPause.textContent='▶ 點擊播放';if(playAfterLoad)player.addEventListener('canplay',safePlay,{once:true})}
-    function seekBy(seconds){if(!Number.isFinite(player.duration))return;player.currentTime=Math.max(0,Math.min(player.duration,player.currentTime+seconds));saveProgress();status.textContent=`目前位置：${formatTime(player.currentTime)}`}
-    function nextTrack(){const index=tracks.indexOf(currentFile);return index>=0&&index<tracks.length-1?tracks[index+1]:null}
-
-    select.addEventListener('change',()=>loadTrack(select.value));
-    autoNext.addEventListener('change',()=>{localStorage.setItem('audioAutoNext',String(autoNext.checked));updateLoop();status.textContent=autoNext.checked?'已開啟：播完自動下一部':'已關閉：重複播放目前這一部'});
-    playPause.addEventListener('click',()=>player.paused?safePlay():player.pause());
-    document.getElementById('back10').addEventListener('click',()=>seekBy(-10));
-    document.getElementById('forward10').addEventListener('click',()=>seekBy(10));
-    document.getElementById('captionSlower').addEventListener('click',()=>adjustSync(-10));
-    document.getElementById('captionFaster').addEventListener('click',()=>adjustSync(10));
-    document.getElementById('captionReset').addEventListener('click',()=>{syncOffsetSeconds=0;localStorage.removeItem(syncKey());updateSyncStatus();updateTranscriptPosition(true)});
-    player.addEventListener('loadedmetadata',()=>{const saved=Number(localStorage.getItem(progressKey())||0);if(saved>0&&saved<player.duration-2){player.currentTime=saved;status.textContent=`已回到上次進度：${formatTime(saved)}`}else status.textContent='準備就緒，點擊播放即可';updateTranscriptPosition(true)});
-    player.addEventListener('timeupdate',()=>{const second=Math.floor(player.currentTime);if(second!==lastSavedSecond&&second%5===0){lastSavedSecond=second;saveProgress()}updateTranscriptPosition()});
-    player.addEventListener('seeked',()=>updateTranscriptPosition(true));
-    player.addEventListener('play',()=>{cancelAnimationFrame(followFrame);transcriptDetails.open=true;playPause.textContent='⏸ 暫停播放';status.textContent=`正在播放：${currentName()}`;followTranscript()});
-    player.addEventListener('pause',()=>{cancelAnimationFrame(followFrame);saveProgress();if(!player.ended)playPause.textContent='▶ 繼續播放'});
-    player.addEventListener('ended',()=>{localStorage.removeItem(progressKey());const next=nextTrack();if(autoNext.checked&&next){status.textContent='本部結束，正在播放下一部…';loadTrack(next,true)}else if(autoNext.checked){status.textContent='全部播放完畢'}else{status.textContent='本部結束，將重複播放目前這一部'}});
-    window.addEventListener('pagehide',saveProgress);document.addEventListener('visibilitychange',()=>{if(document.hidden)saveProgress()});
-
-    if('mediaSession'in navigator){for(const [action,handler] of [['play',safePlay],['pause',()=>player.pause()],['seekbackward',()=>seekBy(-10)],['seekforward',()=>seekBy(10)],['nexttrack',()=>{const next=nextTrack();if(next)loadTrack(next,true)}],['previoustrack',()=>seekBy(-10)]]){try{navigator.mediaSession.setActionHandler(action,handler)}catch{}}}
-    loadTrack(currentFile);
+    (()=>{
+      'use strict';
+      const player=document.getElementById('player'),bigPlay=document.getElementById('bigPlay'),status=document.getElementById('status'),transcript=document.getElementById('transcript'),syncStatus=document.getElementById('syncStatus'),speed=document.getElementById('speed'),autoFollow=document.getElementById('autoFollow');
+      const progressKey='frontFiveKmProgressV1',syncKey='frontFiveKmSyncV1',speedKey='frontFiveKmSpeedV1';
+      let segments=[],weights=[],weightStarts=[],totalWeight=0,activeIndex=-1,syncOffset=Number(localStorage.getItem(syncKey)||0),followFrame=0,lastSaved=-1;
+      const text=typeof window.FRONT_FIVE_KM_TRANSCRIPT==='string'?window.FRONT_FIVE_KM_TRANSCRIPT:'';
+      const formatTime=s=>{s=Math.max(0,Math.floor(Number(s)||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`};
+      const sentenceParts=value=>{const clean=value.replace(/\r\n?/g,'\n').trim();if(!clean)return[];const result=[];for(const block of clean.split(/\n{2,}/).map(v=>v.trim()).filter(Boolean)){if(block.length<=54){result.push(block);continue}const parts=block.match(/[^。！？!?；;\n]+[。！？!?；;]?/g)||[block];let buffer='';for(const raw of parts){const part=raw.trim();if(!part)continue;if(buffer&&buffer.length+part.length>72){result.push(buffer);buffer=part}else buffer+=part}if(buffer)result.push(buffer)}return result};
+      const segmentWeight=value=>Math.max(4,value.replace(/\s/g,'').length+(value.match(/[。！？!?；;，,：:]/g)||[]).length*2.4);
+      function renderText(){transcript.replaceChildren();segments=[];weights=[];weightStarts=[];totalWeight=0;if(!text){transcript.innerHTML='<div class="empty">目前沒有文字內容。</div>';return}const frag=document.createDocumentFragment();for(const part of sentenceParts(text)){weightStarts.push(totalWeight);const w=segmentWeight(part);weights.push(w);totalWeight+=w;const span=document.createElement('span');span.className='segment';span.textContent=part;span.addEventListener('click',()=>{if(!Number.isFinite(player.duration)||player.duration<=0)return;const index=segments.indexOf(span);player.currentTime=Math.max(0,Math.min(player.duration,(weightStarts[index]/totalWeight)*player.duration-syncOffset));updateHighlight(true)});segments.push(span);frag.appendChild(span)}transcript.appendChild(frag)}
+      function indexForTime(){if(!segments.length||!Number.isFinite(player.duration)||player.duration<=0)return-1;const adjusted=Math.max(0,Math.min(player.duration,player.currentTime+syncOffset));const target=adjusted/player.duration*totalWeight;let low=0,high=weightStarts.length-1,answer=0;while(low<=high){const mid=(low+high)>>1;if(weightStarts[mid]<=target){answer=mid;low=mid+1}else high=mid-1}return answer}
+      function updateHighlight(force=false){const next=indexForTime();if(next<0||(!force&&next===activeIndex))return;if(activeIndex>=0)segments[activeIndex]?.classList.remove('active');activeIndex=next;const current=segments[next];current.classList.add('active');if(autoFollow.checked){const top=current.offsetTop-transcript.offsetTop-transcript.clientHeight/2+current.offsetHeight/2;transcript.scrollTo({top:Math.max(0,top),behavior:force?'auto':'smooth'})}}
+      function follow(){updateHighlight();if(!player.paused&&!player.ended)followFrame=requestAnimationFrame(follow)}
+      function updateSync(){localStorage.setItem(syncKey,String(syncOffset));syncStatus.textContent=syncOffset===0?'文字同步：原始估算位置':syncOffset>0?`文字同步：文字已提前 ${syncOffset} 秒`:`文字同步：文字已延後 ${Math.abs(syncOffset)} 秒`;updateHighlight(true)}
+      function seekBy(delta){if(!Number.isFinite(player.duration))return;player.currentTime=Math.max(0,Math.min(player.duration,player.currentTime+delta));saveProgress();updateHighlight(true)}
+      function saveProgress(){if(Number.isFinite(player.currentTime)&&player.currentTime>0)localStorage.setItem(progressKey,String(player.currentTime))}
+      function safePlay(){player.play().catch(()=>status.textContent='請再按一次播放。')}
+      function mediaSession(){if(!('mediaSession'in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:'前方五公里｜第一季第1～10集',artist:'有聲書'});navigator.mediaSession.setActionHandler('play',safePlay);navigator.mediaSession.setActionHandler('pause',()=>player.pause());navigator.mediaSession.setActionHandler('seekbackward',()=>seekBy(-10));navigator.mediaSession.setActionHandler('seekforward',()=>seekBy(10));navigator.mediaSession.setActionHandler('seekto',e=>{if(Number.isFinite(e.seekTime))player.currentTime=e.seekTime})}catch{}}
+      bigPlay.addEventListener('click',()=>player.paused?safePlay():player.pause());
+      document.getElementById('back10').addEventListener('click',()=>seekBy(-10));document.getElementById('forward10').addEventListener('click',()=>seekBy(10));
+      document.getElementById('textLater').addEventListener('click',()=>{syncOffset-=10;updateSync()});document.getElementById('textEarlier').addEventListener('click',()=>{syncOffset+=10;updateSync()});document.getElementById('syncReset').addEventListener('click',()=>{syncOffset=0;updateSync()});
+      speed.value=localStorage.getItem(speedKey)||'1';player.playbackRate=Number(speed.value);speed.addEventListener('change',()=>{player.playbackRate=Number(speed.value);localStorage.setItem(speedKey,speed.value)});
+      player.addEventListener('loadedmetadata',()=>{const saved=Number(localStorage.getItem(progressKey)||0);if(saved>0&&saved<player.duration-2){player.currentTime=saved;status.textContent=`已回到上次進度：${formatTime(saved)}`}updateHighlight(true)});
+      player.addEventListener('timeupdate',()=>{const second=Math.floor(player.currentTime);if(second!==lastSaved&&second%5===0){lastSaved=second;saveProgress()}updateHighlight()});
+      player.addEventListener('play',()=>{cancelAnimationFrame(followFrame);bigPlay.textContent='❚❚ 暫停播放';status.textContent='正在播放：前方五公里';follow()});
+      player.addEventListener('pause',()=>{cancelAnimationFrame(followFrame);saveProgress();if(!player.ended)bigPlay.textContent='▶ 繼續播放'});
+      player.addEventListener('seeked',()=>updateHighlight(true));player.addEventListener('ended',()=>{localStorage.removeItem(progressKey);bigPlay.textContent='↺ 重新播放';status.textContent='第一季第1～10集播放完畢。'});
+      player.addEventListener('error',()=>status.textContent='音檔載入失敗，請重新整理後再試。');
+      document.addEventListener('visibilitychange',saveProgress);window.addEventListener('beforeunload',saveProgress);
+      renderText();updateSync();mediaSession();
+    })();
   </script>
 </body>
 </html>
