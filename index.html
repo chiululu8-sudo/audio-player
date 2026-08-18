@@ -49,33 +49,33 @@
     <section class="panel">
       <div class="title-row">
         <div><h1>前方五公里</h1><p class="subtitle">第一季｜第1～10集</p></div>
-        <span class="version">V1.0</span>
+        <span class="version">V1.1</span>
       </div>
       <div class="track-name">《前方五公里》第一季・第1～10集</div>
-      <button class="big-play" id="bigPlay" type="button">▶ 點擊播放</button>
-      <audio id="player" controls preload="metadata" playsinline src="front-five-km-s1-e01-10.mp3"></audio>
-      <div class="seek-grid">
-        <button class="seek" id="back10" type="button">↶ 倒退10秒</button>
-        <button class="seek" id="forward10" type="button">前進10秒 ↷</button>
-      </div>
       <div class="settings">
         <div class="setting"><label for="speed">播放速度</label><select id="speed"><option value="0.75">0.75倍</option><option value="1" selected>正常</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="2">2倍</option></select></div>
         <div class="setting"><label for="autoFollow">文字自動跟隨</label><input id="autoFollow" type="checkbox" checked></div>
       </div>
+      <div class="seek-grid">
+        <button class="seek" id="back10" type="button">↶ 倒退10秒</button>
+        <button class="seek" id="forward10" type="button">前進10秒 ↷</button>
+      </div>
+      <button class="big-play" id="bigPlay" type="button">▶ 點擊播放</button>
+      <audio id="player" controls preload="metadata" playsinline src="front-five-km-s1-e01-10.mp3"></audio>
       <div class="status" id="status">準備就緒，點擊播放即可。</div>
     </section>
 
     <section class="panel">
       <div class="transcript-head"><h2>聲音文字同步</h2></div>
       <p class="transcript-note">目前念到的句子會標成黃色，並自動移到文字框中央。點選任一句可跳到約略位置。</p>
+      <div class="transcript" id="transcript"><div class="empty">正在準備小說文字……</div></div>
+      <div class="tip">文字位置依整段錄音時間估算；如果語速改變，可用「文字太快／太慢」調整。播放進度及校正值會保存在這台裝置。</div>
       <div class="sync-grid">
         <button class="sync-button" id="textLater" type="button">文字太快<br>延後10秒</button>
         <button class="sync-button" id="textEarlier" type="button">文字太慢<br>提前10秒</button>
         <button class="sync-button reset" id="syncReset" type="button">重設文字同步</button>
       </div>
       <div class="sync-status" id="syncStatus">文字同步：原始估算位置</div>
-      <div class="transcript" id="transcript"><div class="empty">正在準備小說文字……</div></div>
-      <div class="tip">文字位置依整段錄音時間估算；如果語速改變，可用「文字太快／太慢」調整。播放進度及校正值會保存在這台裝置。</div>
     </section>
   </main>
 
