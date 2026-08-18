@@ -17,7 +17,8 @@
     h1{margin:0;color:var(--navy);font-size:clamp(28px,6vw,42px);line-height:1.2}
     .version{color:var(--muted);font-weight:700;white-space:nowrap}
     .subtitle{margin:9px 0 0;color:var(--muted);font-size:18px}
-    .track-name{margin:20px 0 10px;padding:15px;border:1px solid var(--line);border-radius:12px;background:#f8fbfe;color:var(--navy);font-size:19px;font-weight:800}
+    .track-name{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 10px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#f8fbfe;color:var(--navy);font-size:18px;font-weight:800}
+    .track-select{flex:1;max-width:430px;color:var(--navy);font-weight:800}
     audio{width:100%;min-height:58px}
     .big-play{width:100%;min-height:78px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:25px;font-weight:900;cursor:pointer}
     .seek-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
@@ -41,17 +42,23 @@
     .empty{text-align:center;color:var(--muted);padding:50px 10px;line-height:1.7}
     .tip{margin-top:12px;color:var(--muted);font-size:15px;line-height:1.65}
     button:focus-visible,select:focus-visible,input:focus-visible{outline:4px solid #f2bd32;outline-offset:2px}
-    @media(max-width:620px){.shell{padding:9px}.settings{grid-template-columns:1fr}.transcript{height:calc(100dvh - 145px);min-height:440px;font-size:20px}.seek,.sync-button{font-size:17px}.title-row{align-items:flex-start}}
+    @media(max-width:620px){.shell{padding:9px}.settings{grid-template-columns:1fr}.track-name{align-items:stretch;flex-direction:column}.track-select{max-width:none;width:100%}.transcript{height:calc(100dvh - 145px);min-height:440px;font-size:20px}.seek,.sync-button{font-size:17px}.title-row{align-items:flex-start}}
   </style>
 </head>
 <body>
   <main class="shell">
     <section class="panel">
       <div class="title-row">
-        <div><h1>前方五公里</h1><p class="subtitle">第一季｜第1～10集</p></div>
-        <span class="version">V1.1</span>
+        <div><h1>前方五公里</h1><p class="subtitle" id="subtitle">第一季｜第1～10集</p></div>
+        <span class="version">V1.2</span>
       </div>
-      <div class="track-name">《前方五公里》第一季・第1～10集</div>
+      <div class="track-name">
+        <label for="trackSelect">選擇集數</label>
+        <select class="track-select" id="trackSelect" aria-label="選擇集數">
+          <option value="01-10">第一部分｜第1～10集</option>
+          <option value="11-20">第二部分｜第11～20集</option>
+        </select>
+      </div>
       <div class="settings">
         <div class="setting"><label for="speed">播放速度</label><select id="speed"><option value="0.75">0.75倍</option><option value="1" selected>正常</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="2">2倍</option></select></div>
         <div class="setting"><label for="autoFollow">文字自動跟隨</label><input id="autoFollow" type="checkbox" checked></div>
@@ -61,7 +68,7 @@
         <button class="seek" id="forward10" type="button">前進10秒 ↷</button>
       </div>
       <button class="big-play" id="bigPlay" type="button">▶ 點擊播放</button>
-      <audio id="player" controls preload="metadata" playsinline src="front-five-km-s1-e01-10.mp3"></audio>
+      <audio id="player" controls preload="metadata" playsinline></audio>
       <div class="status" id="status">準備就緒，點擊播放即可。</div>
     </section>
 
@@ -79,14 +86,18 @@
     </section>
   </main>
 
-  <script src="transcripts.js?v=1.0"></script>
+  <script src="transcripts.js?v=1.2"></script>
   <script>
     (()=>{
       'use strict';
-      const player=document.getElementById('player'),bigPlay=document.getElementById('bigPlay'),status=document.getElementById('status'),transcript=document.getElementById('transcript'),syncStatus=document.getElementById('syncStatus'),speed=document.getElementById('speed'),autoFollow=document.getElementById('autoFollow');
-      const progressKey='frontFiveKmProgressV1',syncKey='frontFiveKmSyncV1',speedKey='frontFiveKmSpeedV1';
-      let segments=[],weights=[],weightStarts=[],totalWeight=0,activeIndex=-1,syncOffset=Number(localStorage.getItem(syncKey)||0),followFrame=0,lastSaved=-1;
-      const text=typeof window.FRONT_FIVE_KM_TRANSCRIPT==='string'?window.FRONT_FIVE_KM_TRANSCRIPT:'';
+      const player=document.getElementById('player'),bigPlay=document.getElementById('bigPlay'),status=document.getElementById('status'),transcript=document.getElementById('transcript'),syncStatus=document.getElementById('syncStatus'),speed=document.getElementById('speed'),autoFollow=document.getElementById('autoFollow'),trackSelect=document.getElementById('trackSelect'),subtitle=document.getElementById('subtitle');
+      const transcriptMap=window.FRONT_FIVE_KM_TRANSCRIPTS||{'01-10':window.FRONT_FIVE_KM_TRANSCRIPT||''};
+      const tracks={
+        '01-10':{label:'第一部分｜第1～10集',subtitle:'第一季｜第1～10集',mediaTitle:'前方五公里｜第一季第1～10集',src:'front-five-km-s1-e01-10.mp3'},
+        '11-20':{label:'第二部分｜第11～20集',subtitle:'第一季｜第11～20集',mediaTitle:'前方五公里｜第一季第11～20集',src:'front-five-km-s1-e11-20.mp3'}
+      };
+      const trackKey='frontFiveKmTrackV2',speedKey='frontFiveKmSpeedV1';
+      let currentTrack='01-10',progressKey='',syncKey='',text='',segments=[],weights=[],weightStarts=[],totalWeight=0,activeIndex=-1,syncOffset=0,followFrame=0,lastSaved=-1;
       const formatTime=s=>{s=Math.max(0,Math.floor(Number(s)||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`};
       const sentenceParts=value=>{const clean=value.replace(/\r\n?/g,'\n').trim();if(!clean)return[];const result=[];for(const block of clean.split(/\n{2,}/).map(v=>v.trim()).filter(Boolean)){if(block.length<=54){result.push(block);continue}const parts=block.match(/[^。！？!?；;\n]+[。！？!?；;]?/g)||[block];let buffer='';for(const raw of parts){const part=raw.trim();if(!part)continue;if(buffer&&buffer.length+part.length>72){result.push(buffer);buffer=part}else buffer+=part}if(buffer)result.push(buffer)}return result};
       const segmentWeight=value=>Math.max(4,value.replace(/\s/g,'').length+(value.match(/[。！？!?；;，,：:]/g)||[]).length*2.4);
@@ -96,21 +107,30 @@
       function follow(){updateHighlight();if(!player.paused&&!player.ended)followFrame=requestAnimationFrame(follow)}
       function updateSync(){localStorage.setItem(syncKey,String(syncOffset));syncStatus.textContent=syncOffset===0?'文字同步：原始估算位置':syncOffset>0?`文字同步：文字已提前 ${syncOffset} 秒`:`文字同步：文字已延後 ${Math.abs(syncOffset)} 秒`;updateHighlight(true)}
       function seekBy(delta){if(!Number.isFinite(player.duration))return;player.currentTime=Math.max(0,Math.min(player.duration,player.currentTime+delta));saveProgress();updateHighlight(true)}
-      function saveProgress(){if(Number.isFinite(player.currentTime)&&player.currentTime>0)localStorage.setItem(progressKey,String(player.currentTime))}
+      function saveProgress(){if(progressKey&&Number.isFinite(player.currentTime)&&player.currentTime>0)localStorage.setItem(progressKey,String(player.currentTime))}
       function safePlay(){player.play().catch(()=>status.textContent='請再按一次播放。')}
-      function mediaSession(){if(!('mediaSession'in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:'前方五公里｜第一季第1～10集',artist:'有聲書'});navigator.mediaSession.setActionHandler('play',safePlay);navigator.mediaSession.setActionHandler('pause',()=>player.pause());navigator.mediaSession.setActionHandler('seekbackward',()=>seekBy(-10));navigator.mediaSession.setActionHandler('seekforward',()=>seekBy(10));navigator.mediaSession.setActionHandler('seekto',e=>{if(Number.isFinite(e.seekTime))player.currentTime=e.seekTime})}catch{}}
+      function mediaSession(){if(!('mediaSession'in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:tracks[currentTrack].mediaTitle,artist:'有聲書'});navigator.mediaSession.setActionHandler('play',safePlay);navigator.mediaSession.setActionHandler('pause',()=>player.pause());navigator.mediaSession.setActionHandler('seekbackward',()=>seekBy(-10));navigator.mediaSession.setActionHandler('seekforward',()=>seekBy(10));navigator.mediaSession.setActionHandler('seekto',e=>{if(Number.isFinite(e.seekTime))player.currentTime=e.seekTime})}catch{}}
+      function loadTrack(id){
+        if(!tracks[id])id='01-10';
+        if(player.src)saveProgress();
+        cancelAnimationFrame(followFrame);player.pause();
+        currentTrack=id;progressKey=`frontFiveKmProgressV2_${id}`;syncKey=`frontFiveKmSyncV2_${id}`;syncOffset=Number(localStorage.getItem(syncKey)||0);text=typeof transcriptMap[id]==='string'?transcriptMap[id]:'';lastSaved=-1;activeIndex=-1;
+        localStorage.setItem(trackKey,id);trackSelect.value=id;subtitle.textContent=tracks[id].subtitle;player.src=tracks[id].src;player.load();
+        transcript.scrollTop=0;renderText();updateSync();mediaSession();bigPlay.textContent='▶ 點擊播放';status.textContent=`準備播放：${tracks[id].label}`;
+      }
       bigPlay.addEventListener('click',()=>player.paused?safePlay():player.pause());
       document.getElementById('back10').addEventListener('click',()=>seekBy(-10));document.getElementById('forward10').addEventListener('click',()=>seekBy(10));
       document.getElementById('textLater').addEventListener('click',()=>{syncOffset-=10;updateSync()});document.getElementById('textEarlier').addEventListener('click',()=>{syncOffset+=10;updateSync()});document.getElementById('syncReset').addEventListener('click',()=>{syncOffset=0;updateSync()});
+      trackSelect.addEventListener('change',()=>loadTrack(trackSelect.value));
       speed.value=localStorage.getItem(speedKey)||'1';player.playbackRate=Number(speed.value);speed.addEventListener('change',()=>{player.playbackRate=Number(speed.value);localStorage.setItem(speedKey,speed.value)});
       player.addEventListener('loadedmetadata',()=>{const saved=Number(localStorage.getItem(progressKey)||0);if(saved>0&&saved<player.duration-2){player.currentTime=saved;status.textContent=`已回到上次進度：${formatTime(saved)}`}updateHighlight(true)});
       player.addEventListener('timeupdate',()=>{const second=Math.floor(player.currentTime);if(second!==lastSaved&&second%5===0){lastSaved=second;saveProgress()}updateHighlight()});
-      player.addEventListener('play',()=>{cancelAnimationFrame(followFrame);bigPlay.textContent='❚❚ 暫停播放';status.textContent='正在播放：前方五公里';follow()});
+      player.addEventListener('play',()=>{cancelAnimationFrame(followFrame);bigPlay.textContent='❚❚ 暫停播放';status.textContent=`正在播放：${tracks[currentTrack].label}`;follow()});
       player.addEventListener('pause',()=>{cancelAnimationFrame(followFrame);saveProgress();if(!player.ended)bigPlay.textContent='▶ 繼續播放'});
-      player.addEventListener('seeked',()=>updateHighlight(true));player.addEventListener('ended',()=>{localStorage.removeItem(progressKey);bigPlay.textContent='↺ 重新播放';status.textContent='第一季第1～10集播放完畢。'});
+      player.addEventListener('seeked',()=>updateHighlight(true));player.addEventListener('ended',()=>{localStorage.removeItem(progressKey);bigPlay.textContent='↺ 重新播放';status.textContent=`${tracks[currentTrack].label}播放完畢。`});
       player.addEventListener('error',()=>status.textContent='音檔載入失敗，請重新整理後再試。');
       document.addEventListener('visibilitychange',saveProgress);window.addEventListener('beforeunload',saveProgress);
-      renderText();updateSync();mediaSession();
+      loadTrack(localStorage.getItem(trackKey)||'01-10');
     })();
   </script>
 </body>
