@@ -50,13 +50,15 @@
     <section class="panel">
       <div class="title-row">
         <div><h1>前方五公里</h1><p class="subtitle" id="subtitle">第一季｜第1～10集</p></div>
-        <span class="version">V1.2</span>
+        <span class="version">V1.3</span>
       </div>
       <div class="track-name">
         <label for="trackSelect">選擇集數</label>
         <select class="track-select" id="trackSelect" aria-label="選擇集數">
           <option value="01-10">第一部分｜第1～10集</option>
           <option value="11-20">第二部分｜第11～20集</option>
+          <option value="21-40">第三部分｜第21～40集</option>
+          <option value="41-80">完結篇｜第41～80集</option>
         </select>
       </div>
       <div class="settings">
@@ -86,7 +88,7 @@
     </section>
   </main>
 
-  <script src="transcripts.js?v=1.2"></script>
+  <script src="transcripts.js?v=1.3"></script>
   <script>
     (()=>{
       'use strict';
@@ -94,7 +96,9 @@
       const transcriptMap=window.FRONT_FIVE_KM_TRANSCRIPTS||{'01-10':window.FRONT_FIVE_KM_TRANSCRIPT||''};
       const tracks={
         '01-10':{label:'第一部分｜第1～10集',subtitle:'第一季｜第1～10集',mediaTitle:'前方五公里｜第一季第1～10集',src:'front-five-km-s1-e01-10.mp3'},
-        '11-20':{label:'第二部分｜第11～20集',subtitle:'第一季｜第11～20集',mediaTitle:'前方五公里｜第一季第11～20集',src:'front-five-km-s1-e11-20.mp3'}
+        '11-20':{label:'第二部分｜第11～20集',subtitle:'第一季｜第11～20集',mediaTitle:'前方五公里｜第一季第11～20集',src:'front-five-km-s1-e11-20.mp3'},
+        '21-40':{label:'第三部分｜第21～40集',subtitle:'第二季｜第21～40集',mediaTitle:'前方五公里｜第二季第21～40集',src:'front-five-km-s2-e21-40.mp3'},
+        '41-80':{label:'完結篇｜第41～80集',subtitle:'完結篇｜第41～80集',mediaTitle:'前方五公里｜完結篇第41～80集',src:'front-five-km-final-e41-80.mp3'}
       };
       const trackKey='frontFiveKmTrackV2',speedKey='frontFiveKmSpeedV1';
       let currentTrack='01-10',progressKey='',syncKey='',text='',segments=[],weights=[],weightStarts=[],totalWeight=0,activeIndex=-1,syncOffset=0,followFrame=0,lastSaved=-1;
